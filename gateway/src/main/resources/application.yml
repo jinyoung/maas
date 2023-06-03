@@ -1,0 +1,90 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: Transportation Service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/reservations/**, /userPreferences/**, 
+        - id: Payment Service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/payments/**, 
+        - id: Vehicle Service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/vehicles/**, 
+        - id: User Experience Service
+          uri: http://localhost:8088
+          predicates:
+            - Path=/voicePrompts/**, 
+        - id: Accessibility Service
+          uri: http://localhost:8092
+          predicates:
+            - Path=/accessibilityInfos/**, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: Transportation Service
+          uri: http://transportationService:8080
+          predicates:
+            - Path=/reservations/**, /userPreferences/**, 
+        - id: Payment Service
+          uri: http://paymentService:8080
+          predicates:
+            - Path=/payments/**, 
+        - id: Vehicle Service
+          uri: http://vehicleService:8080
+          predicates:
+            - Path=/vehicles/**, 
+        - id: User Experience Service
+          uri: http://userExperienceService:8080
+          predicates:
+            - Path=/voicePrompts/**, 
+        - id: Accessibility Service
+          uri: http://accessibilityService:8080
+          predicates:
+            - Path=/accessibilityInfos/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
